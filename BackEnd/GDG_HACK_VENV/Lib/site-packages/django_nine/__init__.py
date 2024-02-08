@@ -1,0 +1,5 @@
+__title__ = "django_nine"
+__version__ = "0.2.7"
+__author__ = "Artur Barseghyan <artur.barseghyan@gmail.com>"
+__copyright__ = "2015-2022 Artur Barseghyan"
+__license__ = "GPL-2.0-only OR LGPL-2.1-or-later"

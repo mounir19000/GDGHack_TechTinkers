@@ -1,0 +1,273 @@
+Metadata-Version: 2.1
+Name: django-elasticsearch-dsl-drf
+Version: 0.22.5
+Summary: Integrate Elasticsearch DSL with Django REST framework.
+Home-page: https://github.com/barseghyanartur/django-elasticsearch-dsl-drf/
+Author: Artur Barseghyan
+Author-email: artur.barseghyan@gmail.com
+License: GPL-2.0-only OR LGPL-2.1-or-later
+Project-URL: Bug Tracker, https://github.com/barseghyanartur/django-elasticsearch-dsl-drf/issues
+Project-URL: Documentation, https://django-elasticsearch-dsl-drf.readthedocs.io/
+Project-URL: Source Code, https://github.com/barseghyanartur/django-elasticsearch-dsl-drf
+Project-URL: Changelog, https://django-elasticsearch-dsl-drf.readthedocs.io/en/latest/changelog.html
+Keywords: django,elasticsearch,elasticsearch-dsl,django rest framework
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Environment :: Web Environment
+Classifier: License :: OSI Approved :: GNU General Public License v2 (GPLv2)
+Classifier: License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 4 - Beta
+Requires-Python: >=2.7
+License-File: LICENSE_GPL2.0.txt
+License-File: LICENSE_LGPL_2.1.txt
+Requires-Dist: six (>=1.9)
+Requires-Dist: django-nine (>=0.2)
+Requires-Dist: django-elasticsearch-dsl (>=6.4.1)
+Requires-Dist: elasticsearch-dsl
+Requires-Dist: elasticsearch
+Requires-Dist: djangorestframework
+
+============================
+django-elasticsearch-dsl-drf
+============================
+Integrate `Elasticsearch DSL
+<https://pypi.python.org/pypi/elasticsearch-dsl>`_ with
+`Django REST framework <https://pypi.python.org/pypi/djangorestframework>`_ in
+the shortest way possible, with least efforts possible.
+
+Package provides views, serializers, filter backends, pagination and other
+handy add-ons.
+
+You are expected to use `django-elasticsearch-dsl
+<https://pypi.python.org/pypi/django-elasticsearch-dsl>`_ for defining your
+Elasticsearch documents.
+
+.. image:: https://img.shields.io/pypi/v/django-elasticsearch-dsl-drf.svg
+   :target: https://pypi.python.org/pypi/django-elasticsearch-dsl-drf
+   :alt: PyPI Version
+
+.. image:: https://img.shields.io/pypi/pyversions/django-elasticsearch-dsl-drf.svg
+    :target: https://pypi.python.org/pypi/django-elasticsearch-dsl-drf/
+    :alt: Supported Python versions
+
+.. image:: https://github.com/barseghyanartur/django-elasticsearch-dsl-drf/workflows/test/badge.svg
+   :target: https://github.com/barseghyanartur/django-elasticsearch-dsl-drf/actions
+   :alt: Build Status
+
+.. image:: https://readthedocs.org/projects/django-elasticsearch-dsl-drf/badge/?version=latest
+    :target: http://django-elasticsearch-dsl-drf.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
+.. image:: https://img.shields.io/badge/license-GPL--2.0--only%20OR%20LGPL--2.1--or--later-blue.svg
+   :target: https://github.com/barseghyanartur/django-elasticsearch-dsl-drf/#License
+   :alt: GPL-2.0-only OR LGPL-2.1-or-later
+
+.. image:: https://coveralls.io/repos/github/barseghyanartur/django-elasticsearch-dsl-drf/badge.svg?branch=master
+    :target: https://coveralls.io/github/barseghyanartur/django-elasticsearch-dsl-drf?branch=master
+    :alt: Coverage
+
+Documentation
+=============
+Documentation is available on `Read the Docs
+<http://django-elasticsearch-dsl-drf.readthedocs.io/>`_.
+
+Make sure to read `FAQ <https://github.com/barseghyanartur/django-elasticsearch-dsl-drf/blob/master/docs/faq.rst>`_.
+
+Prerequisites
+=============
+- Django 2.2, 3.1 and 3.2.
+- Python 3.6, 3.7, 3.8 and 3.9.
+- Elasticsearch 6.x, 7.x. For older versions use
+  ``django-elasticsearch-dsl-drf`` version 0.18.
+
+Main features and highlights
+============================
+
+- `Dynamic serializer for Documents <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/basic_usage_examples.html#sample-serializer>`_.
+- `Search filter backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/advanced_usage_examples.html#search>`_.
+- `Ordering filter backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/advanced_usage_examples.html#ordering>`_.
+- `Filtering filter backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/advanced_usage_examples.html#filtering>`_ (big variety of
+  native- and functional- query lookups, such as ``gt``, ``gte``, ``lt``,
+  ``lte``, ``endswith``, ``contains``, ``wildcard``, ``exists``, ``exclude``,
+  ``isnull``, ``range``, ``in``, ``prefix`` (same as ``startswith``), ``term``
+  and ``terms`` is implemented.
+- `Geo-spatial filtering filter backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/advanced_usage_examples.html#geo-spatial-features>`_ (the
+  following filters implemented: ``geo_distance``, ``geo_polygon`` and
+  ``geo_bounding_box``).
+- `Geo-spatial ordering filter backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/advanced_usage_examples.html#geo-spatial-features>`_ (the
+  following filters implemented: ``geo_distance``).
+- `Faceted search filter backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/advanced_usage_examples.html#faceted-search>`_.
+- `Post-filter filter backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/advanced_usage_examples.html#post-filter>`_.
+- `Nested filtering filter backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/nested_fields_usage_examples.html#nested-filtering>`_.
+- `Highlight backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/advanced_usage_examples.html#highlighting>`_.
+- `Suggester filter backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/advanced_usage_examples.html#suggestions>`_.
+- `Functional suggester filter backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/advanced_usage_examples.html#functional-suggestions>`_.
+- `Pagination (Page number and limit/offset pagination) <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/advanced_usage_examples.html#pagination>`_.
+- `Ids filter backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/advanced_usage_examples.html#ids-filter>`_.
+- `Multi match search filter backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/search_backends.html#multi-match-search-filter-backend>`_.
+- `Simple search query filter backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/search_backends.html#simple-query-string-filter-backend>`_.
+- `More-like-this support (detail action) <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/more_like_this.html>`_.
+- `Global aggregations support <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/global_aggregations.html>`_.
+- `Source filter backend <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/source_backend.html>`_.
+
+Do you need a similar tool for GraphQL? Check `graphene-elastic
+<https://github.com/barseghyanartur/graphene-elastic>`__.
+
+Demos
+=====
+Online demo
+-----------
+Check the `live demo app <https://django-elasticsearch-dsl-drf.herokuapp.com>`__
+(Django 3.1 + Django REST Framework 3.12 + Elasticsearch 7.5) hosted on Heroku
+and bonsai.io.
+
+Local demo
+----------
+A frontend demo (React based) is available. See the `dedicated docs
+<https://github.com/barseghyanartur/django-elasticsearch-dsl-drf/blob/master/examples/frontend/README.rst>`_
+for more information.
+
+To bootstrap evaluation, clone the repository locally and run `docker-compose`.
+
+.. code-block:: sh
+
+    docker-compose up
+
+It will set up:
+
+- Elasticsearch on `http://localhost:9200 <http://localhost:9200>`_
+- Django REST framework on `http://localhost:8000 <http://localhost:8000>`_
+- React on `http://localhost:3000 <http://localhost:3000>`_
+
+Installation
+============
+(1) Install latest stable version from PyPI:
+
+    .. code-block:: sh
+
+        pip install django-elasticsearch-dsl-drf
+
+    or latest stable version from GitHub:
+
+    .. code-block:: sh
+
+        pip install https://github.com/barseghyanartur/django-elasticsearch-dsl-drf/archive/stable.tar.gz
+
+(2) Add ``rest_framework``, ``django_elasticsearch_dsl`` and
+    ``django_elasticsearch_dsl_drf`` to ``INSTALLED_APPS``:
+
+    .. code-block:: python
+
+        INSTALLED_APPS = (
+            # ...
+            # REST framework
+            'rest_framework',
+
+            # Django Elasticsearch integration
+            'django_elasticsearch_dsl',
+
+            # Django REST framework Elasticsearch integration (this package)
+            'django_elasticsearch_dsl_drf',
+            # ...
+        )
+
+Quick start
+===========
+Perhaps the easiest way to get acquainted with ``django-elasticsearch-dsl-drf``
+is to read the `quick start tutorial <http://django-elasticsearch-dsl-drf.readthedocs.io/en/0.22.5/quick_start.html>`_.
+
+See it as a guide of diving into integration of Elasticsearch with Django
+with very low knowledge entry level.
+
+Testing
+=======
+Project is covered with tests.
+
+To test with all supported Python/Django versions type:
+
+.. code-block:: sh
+
+    tox
+
+To test against specific environment, type:
+
+.. code-block:: sh
+
+    tox -e py38-django30
+
+To test just your working environment type:
+
+.. code-block:: sh
+
+    ./runtests.py
+
+To run a single test in your working environment type:
+
+.. code-block:: sh
+
+    ./runtests.py src/django_elasticsearch_dsl_drf/tests/test_filtering.py
+
+Or:
+
+.. code-block:: sh
+
+    ./manage.py test django_elasticsearch_dsl_drf.tests.test_ordering
+
+To run a single test class in a given test module in your working environment
+type:
+
+.. code-block:: sh
+
+    ./runtests.py src/django_elasticsearch_dsl_drf/tests/test_suggesters.py::TestSuggesters
+
+It's assumed that you have all the requirements installed. If not, first
+install the test requirements:
+
+.. code-block:: sh
+
+    pip install -r examples/requirements/test.txt
+
+Writing documentation
+=====================
+Keep the following hierarchy.
+
+.. code-block:: text
+
+    =====
+    title
+    =====
+
+    header
+    ======
+
+    sub-header
+    ----------
+
+    sub-sub-header
+    ~~~~~~~~~~~~~~
+
+    sub-sub-sub-header
+    ^^^^^^^^^^^^^^^^^^
+
+    sub-sub-sub-sub-header
+    ++++++++++++++++++++++
+
+    sub-sub-sub-sub-sub-header
+    **************************
+
+License
+=======
+GPL-2.0-only OR LGPL-2.1-or-later
+
+Support
+=======
+For any issues contact me at the e-mail given in the `Author`_ section.
+
+Author
+======
+Artur Barseghyan <artur.barseghyan@gmail.com>
