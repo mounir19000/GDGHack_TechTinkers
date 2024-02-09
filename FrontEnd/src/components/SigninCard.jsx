@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 // Functional component for the Sign In card
 const SigninCard = () => {
   // State variables for password and password visibility
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -32,6 +33,7 @@ const SigninCard = () => {
             name="mail"
             type="email"
             placeholder="Username"
+            onChange={(e) => setName(e.target.value)}
           />
 
           <p className="text-[#736A6A] cursor-pointer self-end">
@@ -62,7 +64,7 @@ const SigninCard = () => {
         </div>
 
         {/* Sign In button */}
-        <Link to="/" className="w-full  ">
+        <Link to={name === "Admin" ? "/admin" : "/user"} className="w-full  ">
           <button
             className="bg-[#F9AB00] w-full h-12 text-white  mt-1 rounded-2xl hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue"
             onClick={() => console.log("Login clicked")}

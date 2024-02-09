@@ -5,6 +5,7 @@ import Footer from "./components/footer";
 import Signin from "./Pages/Singin";
 import Signup from "./Pages/Signup";
 import UserPage from "./Pages/UserPage";
+import AdminPage from "./Pages/AdminPage";
 
 // Style
 import "./index.css";
@@ -27,6 +28,9 @@ function App() {
             {" "}
           </Route>
           <Route path="/user" element={<UserPage />}>
+            {" "}
+          </Route>
+          <Route path="/admin" element={<AdminPage />}>
             {" "}
           </Route>
           <Route path="*" element={<Error />}>

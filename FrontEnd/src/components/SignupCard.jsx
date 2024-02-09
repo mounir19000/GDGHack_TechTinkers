@@ -9,9 +9,6 @@ const SignupCard = () => {
   const [password2, setPassword2] = useState("");
   const [showPassword2, setShowPassword2] = useState(false);
 
-  // Just for muting the error
-  console.log(password1);
-  console.log(password2);
 
   return (
     <>
