@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 // import assets
 import Logo from "../assets/Logos-icons/Logo-gdg-algiers.png";
 import Pfp from "../assets/Logos-icons/Profile.png";
+import SearchLogo from "../assets/Logos-icons/search.svg";
 
 // Import compo and pages
 import EventCardUser from "../components/EventCardUser";
@@ -248,6 +249,50 @@ const UserPage = () => {
     setEventsToShow(eventsToShow + 3); // Increase the number of events to show
   };
 
+  // States for the filters
+  const [selectedFilter1, setSelectedFilter1] = useState("nothing");
+  const [selectedFilter2, setSelectedFilter2] = useState("nothing");
+  const [selectedFilter3, setSelectedFilter3] = useState("nothing");
+
+  // Function to handle filter changes
+  const handleFilterChange = (filterType, value) => {
+    switch (filterType) {
+      case 1:
+        setSelectedFilter1(value);
+        break;
+      case 2:
+        setSelectedFilter2(value);
+        break;
+      case 3:
+        setSelectedFilter3(value);
+        break;
+      default:
+        break;
+    }
+  };
+
+  // Filtered events based on selected filters
+  const filteredEvents = allEvents.filter((event) => {
+    // Filter 1: Interne/Externe
+    const filter1Pass =
+      selectedFilter1 === "nothing" ||
+      event.isIntern === (selectedFilter1 === "interne");
+
+    // Filter 2: Hackathon/Ideathon
+    const filter2Pass =
+      selectedFilter2 === "nothing" ||
+      event.isHackathon === (selectedFilter2 === "hackathon");
+
+    // Filter 3: Not registred/Pending/Accepted
+    const filter3Pass =
+      selectedFilter3 === "nothing" ||
+      (selectedFilter3 === "notregistred" && !event.isDone) ||
+      (selectedFilter3 === "pending" && event.isOngoing && !event.isDone) ||
+      (selectedFilter3 === "accepted" && event.isDone);
+
+    return filter1Pass && filter2Pass && filter3Pass;
+  });
+
   return (
     <>
       <div className="flex flex-col bg-[#011225]">
@@ -262,8 +307,67 @@ const UserPage = () => {
         <div className="flex flex-col justify-center items-center px-16 bg-[#011225]">
           <h1 className="mb-6 font-bold text-5xl text-[#ffffff]">Our events</h1>
 
+          <div className="min-w-full flex flex-row justify-between items-center">
+            <div className="relative cursor-pointer h-[40px] min-w-40">
+              <input
+                className="w-full min-w-40 h-full py-2 px-8 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500 text-center"
+                name="searched"
+                type="text"
+                placeholder="Rechercher"
+              />
+              <img
+                className="absolute inset-y-0 left-0 flex items-center pl-4 w-10 h-10"
+                src={SearchLogo}
+              />
+            </div>
+            <div className="flex my-4">
+              {/* Filter 1: Interne/Externe */}
+              <label className="text-black w-auto">
+                Filter 1:
+                <select
+                  className="py-1 px-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500 text-center"
+                  onChange={(e) => handleFilterChange(1, e.target.value)}
+                  value={selectedFilter1}
+                >
+                  <option value="nothing">Nothing</option>
+                  <option value="interne">Interne</option>
+                  <option value="externe">Externe</option>
+                </select>
+              </label>
+
+              {/* Filter 2: Hackathon/Ideathon */}
+              <label className="text-black">
+                Filter 2:
+                <select
+                  className="py-1 px-4  border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500 text-center"
+                  onChange={(e) => handleFilterChange(2, e.target.value)}
+                  value={selectedFilter2}
+                >
+                  <option value="nothing">Nothing</option>
+                  <option value="hackathon">Hackathon</option>
+                  <option value="ideathon">Ideathon</option>
+                </select>
+              </label>
+
+              {/* Filter 3: Not registred/Pending/Accepted */}
+              <label className="text-black">
+                Filter 3:
+                <select
+                  className="py-1 px-4  border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500 text-center"
+                  onChange={(e) => handleFilterChange(3, e.target.value)}
+                  value={selectedFilter3}
+                >
+                  <option value="nothing">Nothing</option>
+                  <option value="notregistred">Not registred</option>
+                  <option value="pending">Pending</option>
+                  <option value="accepted">Accepted</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
           {/* Show the grid of EventCard components */}
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-6 flex-wrap">
             {allEvents.slice(0, eventsToShow).map((event, index) => (
               <EventCardUser key={index} {...event} user={user} />
             ))}
