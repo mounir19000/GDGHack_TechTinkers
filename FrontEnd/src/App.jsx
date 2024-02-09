@@ -4,6 +4,7 @@ import Error from "./Pages/404";
 import Footer from "./components/footer";
 import Signin from "./Pages/Singin";
 import Signup from "./Pages/Signup";
+import UserPage from "./Pages/UserPage";
 
 // Style
 import "./index.css";
@@ -23,6 +24,9 @@ function App() {
             {" "}
           </Route>
           <Route path="/signup" element={<Signup />}>
+            {" "}
+          </Route>
+          <Route path="/user" element={<UserPage />}>
             {" "}
           </Route>
           <Route path="*" element={<Error />}>
