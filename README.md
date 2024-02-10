@@ -35,7 +35,7 @@ To run Eventify locally:
 
 ## Presentation
 
-Dive deeper into Eventify's goals, features, and innovation through our [presentation slides]([presentation-link](https://www.canva.com/design/DAF8SHjhbG4/NsJs_kUlIYbD0SAxeqLBZQ/edit)).
+Dive deeper into Eventify's goals, features, and innovation through our ([presentation slides](https://www.canva.com/design/DAF8SHjhbG4/NsJs_kUlIYbD0SAxeqLBZQ/edit)).
 
 ## Code Repository
 
