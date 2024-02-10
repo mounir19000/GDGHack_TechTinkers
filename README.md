@@ -35,11 +35,11 @@ To run Eventify locally:
 
 ## Presentation
 
-Dive deeper into Eventify's goals, features, and innovation through our [presentation slides](presentation-link).
+Dive deeper into Eventify's goals, features, and innovation through our [presentation slides]([presentation-link](https://www.canva.com/design/DAF8SHjhbG4/NsJs_kUlIYbD0SAxeqLBZQ/edit)).
 
 ## Code Repository
 
-Access the complete source code, documentation, and detailed commit history on our [GitHub repository](github-link).
+Access the complete source code, documentation, and detailed commit history on our [GitHub repository]([github-link](https://github.com/mounir19000/GDGHack_TechTinkers.git)).
 
 ## Team TechTinkers
 
