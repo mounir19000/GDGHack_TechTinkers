@@ -248,9 +248,9 @@ const Accueil = () => {
 
   return (
     <>
-      <div className="flex flex-col h-[100vh] bg-[#011225]">
+      <div className="flex flex-col h-[100vh]">
         <div className=" flex flex-row items-center justify-between w-full px-16 py-6 ">
-          <img src={Logo} alt="Logo" className="h-10 " />
+          <img src={Logo} alt="Logo" className="h-12 " />
           <div className="flex flex-row justify-center items-center gap-6">
             <Link to="/Signup">
               <button className="w-52 h-10 px-3 py-1 font-bold bg-[#2B82FB]  border-none text-white  rounded-lg">
@@ -295,7 +295,7 @@ const Accueil = () => {
         </div>
       </div>
 
-      <div className="flex flex-col justify-center items-center px-16 min-h-[100vh] bg-[#011225]">
+      <div className="flex flex-col justify-center items-center px-16 min-h-[100vh]">
         <h1 className="mb-4 font-bold text-5xl text-[#ffffff]">Our events</h1>
 
         {/* Show the grid of EventCard components */}

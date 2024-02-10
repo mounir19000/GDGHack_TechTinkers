@@ -1,5 +1,5 @@
 import Signincard from "../components/SigninCard";
-import Logo from "../assets/Logos-icons/Logo-gdg-algiers.png";
+import Logo from "../assets/Logos-icons/Logo-gdg-algiers2.png";
 
 const Signin = () => {
   return (

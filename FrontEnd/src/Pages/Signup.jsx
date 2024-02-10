@@ -1,4 +1,4 @@
-import Logo from "../assets/Logos-icons/Logo-gdg-algiers.png";
+import Logo from "../assets/Logos-icons/Logo-gdg-algiers2.png";
 import SignupCard from "../components/SignupCard";
 
 const Signup = () => {

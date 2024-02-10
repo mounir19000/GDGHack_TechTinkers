@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Logo from "../assets/Logos-icons/Logo-gdg-algiers.png";
+import Logo from "../assets/Logos-icons/Logo-gdg-algiers2.png";
 
 const Error = () => {
   return (

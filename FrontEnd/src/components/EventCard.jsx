@@ -26,21 +26,30 @@ const EventCard = ({
         {/* Left side (Title) */}
         <h1 className="font-bold text-2xl m-0">{EventTitle}</h1>
 
-        {/* Right side (Icons and States) */}
-        <div className="flex items-center">
+        <div className="flex items-center space-x-1">
           {/* Intern and extern icons */}
-          {isIntern ? (
-            <img src={intern} alt="" className="w-8 h-8" />
-          ) : (
-            <img src={externe} alt="" className="w-8 h-8" />
-          )}
+          <div className="relative inline-block group">
+            {isIntern ? (
+              <img src={intern} alt="" className="w-8 h-8 cursor-pointer" />
+            ) : (
+              <img src={externe} alt="" className="w-8 h-8 cursor-pointer" />
+            )}
+            <div className="absolute bg-gray-800 text-white text-center p-2 rounded opacity-0 invisible bottom-full left-1/2 transform -translate-x-1/2 transition-opacity duration-300 group-hover:opacity-100 group-hover:visible">
+              {isIntern ? "Intern" : "Extern"}
+            </div>
+          </div>
 
           {/* Hackathon and ideathon icons */}
-          {isHackathon ? (
-            <img src={hackathon} alt="" className="w-8 h-8 mr-2" />
-          ) : (
-            <img src={ideathon} alt="" className="w-8 h-8 mr-2" />
-          )}
+          <div className="relative inline-block group">
+            {isHackathon ? (
+              <img src={hackathon} alt="" className="w-8 h-8 cursor-pointer" />
+            ) : (
+              <img src={ideathon} alt="" className="w-8 h-8 cursor-pointer" />
+            )}
+            <div className="absolute bg-gray-800 text-white text-center p-2 rounded opacity-0 invisible bottom-full left-1/2 transform -translate-x-1/2 transition-opacity duration-300 group-hover:opacity-100 group-hover:visible">
+              {isHackathon ? "Hackathon" : "Ideathon"}
+            </div>
+          </div>
 
           {/* Event date state text */}
           {isBefore && (

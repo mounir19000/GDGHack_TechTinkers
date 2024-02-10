@@ -295,16 +295,16 @@ const UserPage = () => {
 
   return (
     <>
-      <div className="flex flex-col bg-[#011225]">
+      <div className="flex flex-col">
         <div className=" flex flex-row items-center justify-between w-full px-16 py-6 ">
-          <img src={Logo} alt="Logo" className="h-10 " />
+          <img src={Logo} alt="Logo" className="h-12 " />
           <div className="flex justify-center items-center space-x-3">
             <p className="text-white text-xl text-center">{user.username}</p>
             <img src={Pfp} alt="Pfp" className="h-10 w-10" />
           </div>
         </div>
 
-        <div className="flex flex-col justify-center items-center px-16 bg-[#011225]">
+        <div className="flex flex-col justify-center items-center px-16">
           <h1 className="mb-6 font-bold text-5xl text-[#ffffff]">Our events</h1>
 
           <div className="min-w-full flex flex-row justify-between items-center">
