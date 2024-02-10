@@ -39,7 +39,7 @@ Dive deeper into Eventify's goals, features, and innovation through our [present
 
 ## Code Repository
 
-Access the complete source code, documentation, and detailed commit history on our [GitHub repository]([github-link](https://github.com/mounir19000/GDGHack_TechTinkers.git)).
+Access the complete source code, documentation, and detailed commit history on our ([github-link](https://github.com/mounir19000/GDGHack_TechTinkers.git)).
 
 ## Team TechTinkers
 
