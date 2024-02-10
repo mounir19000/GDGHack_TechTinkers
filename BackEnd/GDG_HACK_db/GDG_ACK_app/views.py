@@ -4,6 +4,7 @@ from django.conf import settings
 from rest_framework.viewsets import ModelViewSet
 from django.conf import settings
 import os
+from django.utils import timezone
 import hashlib
 from django.middleware.csrf import get_token
 from django.shortcuts import render
@@ -114,6 +115,10 @@ from . import utils
 from pathlib import Path
 import json
 import os.path
+from .models import *
+from .serializers import *
+from django.shortcuts import get_object_or_404
+
 # Create your views here.
 
 
@@ -148,13 +153,16 @@ def signup_page(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            uname = data.get('Pseudo')
+            user_Nom= data.get('Nom')
+            user_Prenom = data.get('Prenom')
             email = data.get('Email')
             pass1 = data.get('MotdePasse1')
             pass2 = data.get('MotdePasse2')
-
+            discord_id = data.get('discord_id')
+        
+            
             # Vérifier l'unicité du pseudo
-            if CustomUser.objects.filter(username=uname).exists():
+            if CustomUser.objects.filter(username=discord_id).exists():
                 return JsonResponse({"error": "This username is already taken"}, status=400)
 
             # Vérifier si l'e-mail est valide
@@ -169,7 +177,11 @@ def signup_page(request):
                 return JsonResponse({"error": "Your password and confirm password are not the same!!"}, status=403)
             
 
-            my_user = CustomUser.objects.create_user(uname, email, pass1)
+            my_user = CustomUser.objects.create_user(username=discord_id,email=email,  password=pass1 )
+            my_user.discord_id = discord_id
+            my_user.user_Nom = user_Nom
+            my_user.user_Prenom = user_Prenom 
+            
             my_user.save()
 
             return JsonResponse({"message": "User created successfully!"}, status=200)
@@ -177,38 +189,36 @@ def signup_page(request):
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
 
     return JsonResponse({"message": "Method not allowed"}, status=405)
-# se connecter 
-@csrf_exempt
+
+
+# se connecter
+
+@csrf_exempt 
 def LoginPage(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
-            username = data.get('Pseudo')
+            email = data.get('Email')
             password = data.get('MotdePasse')
 
-            # Authenticate regular user
-            user = authenticate(request, username=username, password=password)
+            if email is None or password is None:
+                return JsonResponse({"message": "Adresse e-mail ou mot de passe manquant"}, status=400)
+
+            # Authenticate user with email and password
+            user = authenticate(request, email=email, password=password)
 
             if user is not None:
                 login(request, user)
                 # Include CSRF token and email in the response
                 csrf_token = get_token(request)
-                return JsonResponse({"message": "Authentification réussie", "csrftoken": csrf_token, "email": user.email, "id": user.id})
+                return JsonResponse({"message": "Authentification réussie", "csrftoken": csrf_token, "id": user.id })
             else:
-                # If regular authentication fails, try with Moderateur
-                moderator = Moderateur.objects.filter(username=username).first()
-                if moderator and moderator.check_password(password):
-                    login(request, moderator)
-                    csrf_token = get_token(request)
-                    return JsonResponse({"message": "Authentification en tant que modérateur réussie", "csrftoken": csrf_token, "email": moderator.email})
-                else:
-                    return JsonResponse({"message": "Nom d'utilisateur ou mot de passe incorrect"}, status=401)
+                return JsonResponse({"message": "Adresse e-mail ou mot de passe incorrect"}, status=401)
 
         except json.JSONDecodeError:
             return JsonResponse({"message": "Format JSON invalide"}, status=400)
 
     return JsonResponse({"message": "Méthode non autorisée"}, status=405)
-    
     
 # 3- deconnnexion de l'utilisateur 
 @csrf_exempt
@@ -349,51 +359,202 @@ def reset_password(request):
 
     except User.DoesNotExist:
         return JsonResponse({'message': 'Aucun utilisateur trouvé avec cette adresse e-mail.'}, status=400)
+    
+#8- update etat event 
 
-#8- ajouter un evenement 
+def update_event_state():
+    now = timezone.now().date()
+    events_before = Event.objects.filter(date_start__gt=now)
+    events_on_going = Event.objects.filter(date_start__lte=now, date_end__gte=now)
+    events_after = Event.objects.filter(date_end__lt=now)
+
+    for event in events_before:
+        event.state = 'before'
+        event.save()
+
+    for event in events_on_going:
+        event.state = 'on_going'
+        event.save()
+
+    for event in events_after:
+        event.state = 'after'
+        event.save()
+
+#9- ajouter un evenement 
+@api_view(['POST'])
+@csrf_exempt
+def ajouter_events(request):
+    # Charger les données JSON depuis le corps de la requête
+    data = json.loads(request.body)
+    
+    # Extraire les champs spécifiques de la requête
+    nom = data.get('nom')
+    description = data.get('description')
+    type_event = data.get('type_event')
+    date_start = data.get('date_start')
+    date_end = data.get('date_end')
+    location = data.get('location')
+    
+    # Créer un dictionnaire pour les données de l'événement
+    event_data = {
+        
+        'nom': nom,
+        'description': description,
+        'type_event': type_event,
+        'date_start': date_start,
+        'date_end': date_end,
+        'location': location , 
+    }
+    
+    # Créer un serializer pour valider et désérialiser les données
+    serializer = EventSerializer(data=event_data)
+    
+    # Valider les données et créer l'événement si les données sont valides
+    if serializer.is_valid():
+        try:
+            event = serializer.save()
+             # Appeler la fonction pour mettre à jour l'état des événements
+            return Response(serializer.data, status=201)
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
+    else:
+        # Renvoyer les erreurs de validation au client
+        return Response(serializer.errors, status=400)
+    
+#10- afficher tous les events 
+
+@api_view(['GET'])
+@csrf_exempt
+def get_events(request):
+    events = Event.objects.all()
+    serialized_events = []
+    for event in events:
+        if event.state == 'after':
+            serialized_events.append(EventAfterSerializer(event).data)
+        else:
+            serialized_events.append(EventSerializer(event).data)
+    return Response(serialized_events)
+    
+#11- ajouter un sponsor 
+
+@api_view(['POST'])
+@csrf_exempt
+
+def add_sponsor(request):
+    # Récupérer les données du corps de la requête
+    data = request.data
+
+    # Sérialiser les données pour valider et désérialiser
+    serializer = SponsorSerializer(data=data)
+
+    if serializer.is_valid():
+        # Créer un nouvel objet Sponsor avec les données fournies
+        sponsor = serializer.save()
+
+        # Retourner une réponse indiquant que le sponsor a été ajouté avec succès
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        # Retourner une réponse d'erreur avec les détails des erreurs de validation
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+#12 - afficher les sponsors   
+  
+@api_view(['GET'])
+@csrf_exempt
+
+def get_sponsors(request):
+    # Récupérer tous les sponsors de la base de données
+    sponsors = Sponsor.objects.all()
+
+    # Sérialiser les sponsors récupérés
+    serializer = SponsorSerializer(sponsors, many=True)
+
+    # Retourner la liste des sponsors sérialisés dans la réponse
+    return Response(serializer.data)    
+ 
+
+#13- ajouter un organizer 
+
+@api_view(['POST'])
+@csrf_exempt
+
+def add_organizer_to_event(request, event_name):
+    
+    # Récupérer les données de la requête
+    data = request.data
+    
+    # Extraire les informations sur l'utilisateur de la requête
+    user_data = data.get('user', {})  # Assurez-vous que 'user' est présent dans les données de la requête
+    
+    # Créer un utilisateur avec les données fournies
+    user_serializer = CustomUserSerializer(data=user_data)
+    
+    if user_serializer.is_valid():
+        # Sauvegarder l'utilisateur
+        user = user_serializer.save()
+    else:
+        # Retourner une réponse d'erreur si les données de l'utilisateur sont invalides
+        return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Récupérer l'objet Event en fonction de son nom
+    event = get_object_or_404(Event, nom=event_name)
+    
+    # Créer un organisateur avec l'utilisateur créé précédemment et d'autres données
+    organizer_data = {
+        'user': user.id,  # Utiliser l'ID de l'utilisateur
+        'department': data.get('department'),
+        'working_hours': data.get('working_hours'),
+        'tasks_to_do': data.get('tasks_to_do'),
+    }
+    organizer_serializer = OrganizerSerializer(data=organizer_data)
+    
+    if organizer_serializer.is_valid():
+        # Sauvegarder l'organisateur
+        organizer = organizer_serializer.save()
+        # Ajouter l'organisateur à l'événement
+        event.organisateurs.add(organizer)
+        event.save()
+        # Serializer l'événement mis à jour et renvoyer la réponse
+        event_serializer = EventSerializer(event)
+        return Response(event_serializer.data, status=status.HTTP_200_OK)
+    else:
+        # Retourner une réponse d'erreur si les données de l'organisateur sont invalides
+        return Response(organizer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     
+@api_view(['GET'])
+def get_event_ids(request):
+    # Récupérer tous les événements de la base de données
+    events = Event.objects.all()
     
+    # Extraire les IDs des événements
+    event_ids = [event.id for event in events]
     
+    # Retourner la liste des IDs des événements
+    return Response(event_ids, status=status.HTTP_200_OK)
+
+#15-ajouter mentor 
+
+def add_mentor(request, event_id):
     
+    data = request.data
+    user_id = data.get('user_id')  # Supposons que vous envoyiez l'ID de l'utilisateur dans la requête
+
+    # Vérifiez si l'utilisateur existe
+    user = get_object_or_404(User, pk=user_id)
+
+    # Vérifiez si l'événement existe
+    event = get_object_or_404(Event, pk=event_id)
+
+    # Créez l'organisateur en utilisant l'utilisateur existant et l'événement
+    mentor = Mentor.objects.create(user=user, event=event)
     
-#9- ajouter un sponsor 
+    serializer =MentorSerializer(mentor)
+    
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 
 
+# 16 - consulter event
 
-
-#10- ajouter un organizer 
-
-
-
-
-
-#11- ajouter un particpant 
-
-
-
-
-#12-ajouter mentor 
-
-
-
-
-
-#13- afficher departements 
-
-
-
-
-#14  afficher  events 
-
-
-
-
-
-
-
-
-
-#15- ajouter un feedback   
